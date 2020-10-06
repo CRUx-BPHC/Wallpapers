@@ -27,5 +27,18 @@ def nasa(image_base_path):
             f.write(image.content)
         return
 
+def ngc(image_base_path):
+    r = requests.get('http://photography.nationalgeographic.com/photography/photo-of-the-day/')
+    i=r.text.find('https://www.nationalgeographic.com/content/dam/photography/photo-of-the-day/')
+    j=r.text.find('.jpg',i)+len('.jpg')
+    ngc_image_url=r.text[i:j]
+    image = requests.get(ngc_image_url)
+    if image.status_code == 200:
+        image_file_name=image_base_path+'ngc_'+dt+'.jpg'
+        with open(image_file_name, 'wb') as f:
+            f.write(image.content)
+        return
+
 bing("./Images/")
 nasa("./Images/")
+ngc("./Images/")
